@@ -5,6 +5,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
 public class WriteFile {
+    private static boolean pathExistent = true;
     public static void writeFile(ReadFile readFile) throws IOException {
         if (ParsingArguments.getPath() != null) {
 
@@ -13,22 +14,27 @@ public class WriteFile {
 
                 if (ParsingArguments.getPrefixName() != null) {
                     crateFile(readFile, ParsingArguments.getPrefixName(), userSpecifiedPath);
-
                 } else {
                     crateFile(readFile, userSpecifiedPath);
                 }
             } else {
                 System.out.println("Введите существующий путь расположения файла после аргумента \"-o\" в формате " +
                         "путь/путь.");
+                pathExistent = false;
             }
         } else {
             if (ParsingArguments.getPrefixName() != null) {
                 crateFile(readFile, ParsingArguments.getPrefixName());
-
             } else {
                 crateFile(readFile);
             }
         }
+        if ((!readFile.getStringsText().isEmpty() || !readFile.getDoubleNumber().isEmpty()
+                || !readFile.getIntNumber().isEmpty()) && pathExistent){
+            System.out.println("Фильтрация выполнена, файлы успешно созданы.");
+        } else
+            System.out.println("Фильтрация не выполнена. Используйте опцию \"-i\" для получения информации о" +
+                    " доступных опциях программы.");
     }
 
     public static void crateFile(ReadFile readFile, String prefixName) throws IOException {
